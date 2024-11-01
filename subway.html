@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset=utf-8 />
+    <title>NYC Subway Stations</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: whitesmoke;
+            font-family: Lato, sans-serif;
+            color: #0D0000;
+        }
+        header {
+            padding: 6px 10%;
+        }
+        h1 {
+            display: inline-block;
+            margin-right: 20px;
+            color: #001323;
+        }
+        h2 {
+            display: inline-block;
+            color: #001323;
+        }
+        #map {
+            width: 80%;
+            height: 540px;
+            margin: 10px auto;
+        }
+        footer {
+            padding: 6px 10%;
+            width: 80%;
+        }
+        p {
+            font-size: 1em;
+            color: #001323;
+        }
+    </style>
+<script>function lti_launch( vars, target ) {
+						var query = '';
+						var new_tab = false;
+
+						for(var key in vars) {
+							if(query.length == 0) {
+								query += '?' + key + '=' + encodeURIComponent(vars[key]);
+							}
+							else {
+								query += '&' + key + '=' + encodeURIComponent(vars[key]);
+							}
+						}
+
+						var url = '/d2l/customization/pearsonlti/6606/Launch' + query;(target == '_blank') ? window.open( url, '_blank' ) : location.replace( url );}</script><script src="/d2l/common/iframe/iframe-client.js?v=20.24.10.20212"></script><script src="https://s.brightspace.com/lib/bsi/2024.10.207/unbundled/embeds.js" type="module"></script><script>document.addEventListener('DOMContentLoaded', function() {
+					window.D2L.EmbedRenderer.renderEmbeds(document.body);
+				});</script><script src="https://s.brightspace.com/lib/bsi/2024.10.207/unbundled/mathjax.js" type="module"></script><script>document.addEventListener('DOMContentLoaded', function() {
+						if (document.querySelector('math') || /\$\$|\\\(|\\\[|\\begin{|\\ref{|\\eqref{/.test(document.body.innerHTML)) {
+							document.querySelectorAll('mspace[linebreak="newline"]').forEach(elm => {
+								elm.setAttribute('style', 'display: block; height: 0.5rem;');
+							});
+
+							window.D2L.MathJax.loadMathJax({
+								outputScale: 1.5,
+								renderLatex: true,
+								enableMML3Support: false
+							});
+						}
+					});</script><script src="https://s.brightspace.com/lib/bsi/2024.10.207/unbundled/prism.js" type="module"></script><script>document.addEventListener('DOMContentLoaded', function() {
+					document.querySelectorAll('.d2l-code').forEach(code => {
+						window.D2L.Prism.formatCodeElement(code);
+					});
+				});</script><script src="https://s.brightspace.com/lib/bsi/2024.10.207/unbundled/creator.js" type="module"></script><script>document.addEventListener('DOMContentLoaded', async () => {
+					const activities = [];
+					const practices = [];
+					const allPractices = document.querySelectorAll('.d2l-practice');
+					const elements = document.querySelectorAll('.d2l-element');
+					let layouts = [...document.querySelectorAll('.d2l-cplus-layout')];
+					const tables = document.querySelectorAll('table');
+					const contentStylerStyleLinks = document.querySelectorAll('head > link[href="https://templates.lcs.brightspace.com/lib/assets/css/styles.min.css"]');
+					const contentStylerOverides = document.querySelectorAll('head > link[href^="/d2l/le/contentstyler/"][data-override="override"]');
+
+					layouts = layouts.filter((layout) => layout.closest('.d2l-element.mceNonEditable') === null);
+
+					for (const practice of allPractices) {
+						const activityContainer = practice.hasAttribute('data-d2l-activity-href');
+						if (activityContainer) {
+							activities.push(practice);
+						}
+						else {
+							practices.push(practice);
+						}
+					}
+
+					if (layouts.length > 0) {
+						window.D2L.Creator.convertLayouts(layouts);
+					}
+					if (elements.length > 0) {
+						window.D2L.Creator.convertElements(elements, 6606, '/content/', 'True');
+					}
+					if (activities.length > 0) {
+						window.D2L.Creator.convertPracticeActivities(activities, 6606, '/content/');
+					}
+					if (practices.length > 0) {
+						window.D2L.Creator.convertPractices(practices, 6606, '/content/');
+					}
+					if (contentStylerStyleLinks.length > 0 && contentStylerOverides.length > 0 && tables.length > 0) {
+						window.D2L.Creator.wrapTables(tables);
+					}
+				});</script><script>document.addEventListener('DOMContentLoaded', function() {
+						if (document.documentElement.hasAttribute('lang')) return;
+						document.documentElement.setAttribute('lang', 'en-us'); 						
+					});</script><script>document.addEventListener('DOMContentLoaded', function() {
+						if (document.head.querySelector('title')) return;
+						var handleAppendTitle = function(evt) {
+							if (!evt || !evt.data) return;
+
+							try {
+								var data = JSON.parse(evt.data);
+								if (data.handler !== 'd2l.iframe.requestPageTitle' || !data.pageTitle) return;
+
+								window.removeEventListener('message', handleAppendTitle, false);
+
+								var titleElm = document.createElement('title');
+								titleElm.textContent = data.pageTitle;
+								document.head.appendChild(titleElm);
+							} catch (e) {}	
+						};
+
+						window.addEventListener('message', handleAppendTitle, false);
+						window.parent.postMessage(JSON.stringify({ handler: 'd2l.iframe.requestPageTitle' }), '*');
+					});</script><script>window.addEventListener('message', function(event) { 
+					if( !event.data ) {
+						return;
+					}
+
+					let params;
+					try {
+						params = JSON.parse( event.data );
+					}
+					catch {
+						return;
+					}
+					if( !params.subject || params.subject !== 'lti.frameResize' ) {
+						return;
+					}
+
+					const MAX_FRAME_HEIGHT = 10000;
+					if( !params.height || params.height < 1 || params.height > MAX_FRAME_HEIGHT ) {
+						console.warn( 'Invalid height value received, aborting' );
+						return;
+					}
+					const el = document.getElementsByTagName( 'iframe' );
+					for ( let i=0; i < el.length; i++ ) {
+						if( el[i].contentWindow === event.source ) {
+							el[i].style.height = params.height + 'px';
+
+							console.info( 'Setting iFrame height to ' + params.height );
+
+							if( el[i].getAttribute('lockwidth') !== 'true'){
+								el[i].style.width = '100%';
+								console.info( 'Setting iFrame width to 100%' );
+							}
+						}
+					}
+				});</script></head>
+
+<body>
+    <header>
+        <h1>NYC Subway Stations</h1>
+        <h2></h2>
+    </header>
+
+    <div id='map'></div>
+
+    <footer>
+        <p>By Mike Hernandez</p>
+        <p></p>
+    </footer>
+
+    <script src="Subway Stations.js"></script>
+    <script src="Borough Boundaries.js"></script>
+    <script>
+
+      var map = L.map('map', {
+          center: [40.7831, -73.9712],
+          zoom: 10,
+      });
+      
+      var tiles = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+          subdomains: 'abcd',
+          maxZoom: 19
+      });  
+      
+      tiles.addTo(map);
+            
+      var all = L.geoJson(subway, {
+          pointToLayer: function(feature,latlng) {
+              console.log(feature.properties)
+              return L.circleMarker(latlng, {
+                 color: 'red',
+                 weight: 2,
+                 fillColor: 'white',
+                 fillOpacity: .6,
+                 radius: 4,
+                 stroke: false,
+              });   
+          },
+          
+     
+         
+    //step 5
+    onEachFeature : function(feature,layer) {
+    layer.on('mouseover', function() {
+    layer.setStyle({
+        fillColor: 'blue'
+    });
+});
+layer.on('mouseout', function() {
+    layer.setStyle({
+        fillColor: 'white'
+    });
+});
+
+
+          //step 6  
+          
+           var name = feature.properties.name
+           var line = feature.properties.line
+       
+      
+                                                
+          
+          var popup = (
+          "<b>"+name+"</b><br>"+
+          "<i>"+line+"</i><br>" )
+                       layer.bindTooltip(popup).openTooltip
+          }
+          
+          
+      }).addTo(map); 
+
+      var l = L.geoJson(subway, {
+          pointToLayer: function(feature,latlng) {
+              console.log(feature.properties.name)
+              return L.circleMarker(latlng, {
+                 color: 'grey',
+                 weight: 2,
+                 fillColor: 'grey',
+                 fillOpacity: .5,
+                 radius: 4 //step4
+              });   
+          },
+          
+          filter : function(feature, layer){
+              if(feature.properties.line === "L"){
+                  return true
+    }
+    },
+         
+    //step 5
+    onEachFeature : function(feature,layer) {
+    layer.on('mouseover', function() {
+    layer.setStyle({
+        fillColor: 'red'
+    });
+});
+layer.on('mouseout', function() {
+    layer.setStyle({
+        fillColor: 'blue'
+    });
+});
+
+
+          //step 6  
+          
+           var name = feature.properties.name
+           var line = feature.properties.line
+       
+      
+                                                
+          
+          var popup = (
+          "<b>"+name+"</b><br>"+
+          "<i>"+line+"</i><br>" )
+                       layer.bindTooltip(popup).openTooltip
+          }
+        
+      }).addTo(map); 
+      
+
+      var j = L.geoJson(subway, {
+          pointToLayer: function(feature,latlng) {
+              console.log(feature.properties.name)
+              return L.circleMarker(latlng, {
+                 color: 'yellow',
+                 weight: 2,
+                 fillColor: 'yellow',
+                 fillOpacity: .5,
+                 radius: 4 //step4
+              });   
+          },
+          
+          filter : function(feature, layer){
+              if(feature.properties.line === "Q" || feature.properties.line === "B-Q")  {
+                  return true
+    }
+    },
+         
+    //step 5
+    onEachFeature : function(feature,layer) {
+    layer.on('mouseover', function() {
+    layer.setStyle({
+        fillColor: 'red'
+    });
+});
+layer.on('mouseout', function() {
+    layer.setStyle({
+        fillColor: 'yellow'
+    });
+});
+
+
+
+          //step 6  
+          
+           var name = feature.properties.name
+           var line = feature.properties.line
+       
+      
+                                                
+          
+          var popup = (
+          "<b>"+name+"</b><br>"+
+          "<i>"+line+"</i><br>" )
+                       layer.bindTooltip(popup).openTooltip
+          }
+          
+          
+      }).addTo(map); 
+
+      //var j = L.geoJson(subway, {
+        //  pointToLayer: function(feature,latlng) {
+          //    console.log(feature.properties.name)
+            //  return L.circleMarker(latlng, {
+              //   color: 'yellow',
+                // weight: 2,
+                 //fillColor: 'yellow',
+                 //fillOpacity: .5,
+                 //radius: 2 //step4
+              //});   
+      
+    var o = L.geoJson(subway, {
+          pointToLayer: function(feature,latlng) {
+              console.log(feature.properties.name)
+              return L.circleMarker(latlng, {
+                 color: 'pink',
+                 weight: 2,
+                 fillColor: 'pink',
+                 fillOpacity: .5,
+                 radius: 4 //step4
+              });   
+          },
+          
+          filter : function(feature, layer){
+              if(feature.properties.line === "1"){
+                  return true
+    }
+    },
+         
+    //step 5
+    onEachFeature : function(feature,layer) {
+    layer.on('mouseover', function() {
+    layer.setStyle({
+        fillColor: 'red'
+    });
+});
+layer.on('mouseout', function() {
+    layer.setStyle({
+        fillColor: 'blue'
+    });
+});
+
+
+          //step 6  
+          
+           var name = feature.properties.name
+           var line = feature.properties.line
+       
+      
+                                                
+          
+          var popup = (
+          "<b>"+name+"</b><br>"+
+          "<i>"+line+"</i><br>" )
+                       layer.bindTooltip(popup).openTooltip
+          }
+        
+      }).addTo(map); 
+
+
+      var b = L.geoJson(b, {
+        style: function (feature) {
+        return {color: 'white',
+                opacity: 1,
+                fill: false, 
+                stroke: 3
+    };
+    }
+      }
+      )
+      .addTo(map);
+
+      var sourceLayers = {
+    "<b style='color:cyan'>All</b>": all,
+    "<b style='color:grey'>L</b>": l,
+    "<b style='color:yellow'>Q</b>": j,
+    
+};
+L.control.layers(null, sourceLayers, {collapsed:false} ).addTo(map);
+
+     /*  "<a href='" + feature.properties.Website + "website'>" +
+          "<b>"+name+"</b><br>"+
+          "<i>"+date+"</i><br>"  +location+  "<br>" ) */
+          
+    </script>
+    
+</body>
+
+</html>
