@@ -206,346 +206,73 @@
     <script src="Subway Stations.js"></script>
     <script src="Borough Boundaries.js"></script>
     <script>
-
+        // Define the map
         var map = L.map('map', {
             center: [40.7831, -73.9712],
             zoom: 10,
         });
-
+    
         var tiles = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
             subdomains: 'abcd',
             maxZoom: 19
         });
-
         tiles.addTo(map);
-
-        var defaultview = L.geoJson(subway, {
-            pointToLayer: function (feature, latlng) {
-                console.log(feature.properties)
-                return L.circleMarker(latlng, {
-                    color: 'red',
-                    weight: 2,
-                    fillColor: 'white',
-                    fillOpacity: .6,
-                    radius: 4,
-                    stroke: false,
-                });
-            },
-
-
-
-            //step 5
-            onEachFeature: function (feature, layer) {
-                layer.on('mouseover', function () {
-                    layer.setStyle({
-                        fillColor: 'blue'
-                    });
-                });
-                layer.on('mouseout', function () {
-                    layer.setStyle({
-                        fillColor: 'white'
-                    });
-                });
-
-
-                //step 6  
-
-                var name = feature.properties.name
-                var line = feature.properties.line
-
-
-
-
-                var popup = (
-                    "<b>" + name + "</b><br>" +
-                    "<i>" + line + "</i><br>")
-                layer.bindTooltip(popup).openTooltip
-            }
-
-
-        }).addTo(map);
-
-        var ltrain = L.geoJson(subway, {
-            pointToLayer: function (feature, latlng) {
-                console.log(feature.properties.name)
-                return L.circleMarker(latlng, {
-                    color: 'grey',
-                    weight: 2,
-                    fillColor: 'grey',
-                    fillOpacity: .5,
-                    radius: 4 //step4
-                });
-            },
-
-            filter: function (feature, layer) {
-                if (feature.properties.line === "L") {
-                    return true
-                }
-            },
-
-            //step 5
-            onEachFeature: function (feature, layer) {
-                layer.on('mouseover', function () {
-                    layer.setStyle({
-                        fillColor: 'red'
-                    });
-                });
-                layer.on('mouseout', function () {
-                    layer.setStyle({
-                        fillColor: 'blue'
-                    });
-                });
-
-
-                //step 6  
-
-                var name = feature.properties.name
-                var line = feature.properties.line
-
-
-
-
-                var popup = (
-                    "<b>" + name + "</b><br>" +
-                    "<i>" + line + "</i><br>")
-                layer.bindTooltip(popup).openTooltip
-            }
-
-        }).addTo(map);
-
-
-        var bdfq = L.geoJson(subway, {
-            pointToLayer: function (feature, latlng) {
-                console.log(feature.properties.name)
-                return L.circleMarker(latlng, {
-                    color: 'yellow',
-                    weight: 2,
-                    fillColor: 'yellow',
-                    fillOpacity: .5,
-                    radius: 4 //step4
-                });
-            },
-
-            filter: function (feature, layer) {
-                if (feature.properties.line === "Q" || feature.properties.line === "B-Q" || feature.properties.line === "D" || feature.properties.line === "F" || feature.properties.line === "B-D-F-M") {
-                    return true
-                }
-            },
-
-            //step 5
-            onEachFeature: function (feature, layer) {
-                layer.on('mouseover', function () {
-                    layer.setStyle({
-                        fillColor: 'red'
-                    });
-                });
-                layer.on('mouseout', function () {
-                    layer.setStyle({
-                        fillColor: 'yellow'
-                    });
-                });
-
-
-
-                //step 6  
-
-                var name = feature.properties.name
-                var line = feature.properties.line
-
-
-
-
-                var popup = (
-                    "<b>" + name + "</b><br>" +
-                    "<i>" + line + "</i><br>")
-                layer.bindTooltip(popup).openTooltip
-            }
-
-
-        }).addTo(map);
-
-        //var j = L.geoJson(subway, {
-        //  pointToLayer: function(feature,latlng) {
-        //    console.log(feature.properties.name)
-        //  return L.circleMarker(latlng, {
-        //   color: 'yellow',
-        // weight: 2,
-        //fillColor: 'yellow',
-        //fillOpacity: .5,
-        //radius: 2 //step4
-        //});   
-
-        var redline = L.geoJson(subway, {
-            pointToLayer: function (feature, latlng) {
-                console.log(feature.properties.name)
-                return L.circleMarker(latlng, {
-                    color: 'white',
-                    weight: 2,
-                    fillColor: 'red',
-                    fillOpacity: .5,
-                    radius: 4 //step4
-                });
-            },
-
-            filter: function (feature, layer) {
-                if (feature.properties.line === "1" || feature.properties.line === "2" || feature.properties.line === "3" || feature.properties.line === "1-2-3") {
-                    return true
-                }
-            },
-
-            //step 5
-            onEachFeature: function (feature, layer) {
-                layer.on('mouseover', function () {
-                    layer.setStyle({
-                        fillColor: 'red'
-                    });
-                });
-                layer.on('mouseout', function () {
-                    layer.setStyle({
-                        fillColor: 'blue'
-                    });
-                });
-
-
-                //step 6  
-
-                var name = feature.properties.name
-                var line = feature.properties.line
-
-
-
-
-                var popup = (
-                    "<b>" + name + "</b><br>" +
-                    "<i>" + line + "</i><br>")
-                layer.bindTooltip(popup).openTooltip
-            }
-
-        }).addTo(map);
-
-        var greenline = L.geoJson(subway, {
-            pointToLayer: function (feature, latlng) {
-                console.log(feature.properties.name)
-                return L.circleMarker(latlng, {
-                    color: 'white',
-                    weight: 2,
-                    fillColor: 'green',
-                    fillOpacity: .5,
-                    radius: 4 //step4
-                });
-            },
-
-            filter: function (feature, layer) {
-                if (feature.properties.line === "4" || feature.properties.line === "4-5" || feature.properties.line === "4-5-6" || feature.properties.line === "5" || feature.properties.line === "6" || feature.properties.line === "6-6 Express" || feature.properties.line === "6-6 Express-6 Local") {     
-                    return true
-                }
-            },
-
-            //step 5
-            onEachFeature: function (feature, layer) {
-                layer.on('mouseover', function () {
-                    layer.setStyle({
-                        fillColor: 'white'
-                    });
-                });
-                layer.on('mouseout', function () {
-                    layer.setStyle({
-                        fillColor: 'red'
-                    });
-                });
-
-
-                //step 6  
-
-                var name = feature.properties.name
-                var line = feature.properties.line
-
-
-
-
-                var popup = (
-                    "<b>" + name + "</b><br>" +
-                    "<i>" + line + "</i><br>")
-                layer.bindTooltip(popup).openTooltip
-            }
-
-        }).addTo(map);
-
-        var blueline = L.geoJson(subway, {
-            pointToLayer: function (feature, latlng) {
-                console.log(feature.properties.name)
-                return L.circleMarker(latlng, {
-                    color: 'white',
-                    weight: 2,
-                    fillColor: 'blue',
-                    fillOpacity: .5,
-                    radius: 4 //step4
-                });
-            },
-
-            filter: function (feature, layer) {
-                if (feature.properties.line === "A" || feature.properties.line === "A-C" || feature.properties.line === "A-C-E" || feature.properties.line === "C" || feature.properties.line === "E") {
-                    return true
-                }
-            },
-
-            //step 5
-            onEachFeature: function (feature, layer) {
-                layer.on('mouseover', function () {
-                    layer.setStyle({
-                        fillColor: 'white'
-                    });
-                });
-                layer.on('mouseout', function () {
-                    layer.setStyle({
-                        fillColor: 'red'
-                    });
-                });
-
-
-                //step 6  
-
-                var name = feature.properties.name
-                var line = feature.properties.line
-
-
-
-
-                var popup = (
-                    "<b>" + name + "</b><br>" +
-                    "<i>" + line + "</i><br>")
-                layer.bindTooltip(popup).openTooltip
-            }
-
-        }).addTo(map);
-
-        var b = L.geoJson(b, {
-            style: function (feature) {
-                return {
-                    color: 'white',
-                    opacity: 1,
-                    fill: false,
-                    stroke: 3
-                };
-            }
+    
+        // Helper function to match lines in any format
+        function matchLine(featureLine, lineArray) {
+            const featureLines = featureLine.split(/[-\s]+/);  // Split by dashes or spaces
+            return lineArray.some(line => featureLines.includes(line));
         }
-        )
-            .addTo(map);
-
-        var sourceLayers = {
-            "<b style='color:cyan'>All</b>": all,
-            "<b style='color:grey'>L</b>": l,
-            "<b style='color:yellow'>Q</b>": j,
-
-        };
-        L.control.layers(null, sourceLayers, { collapsed: false }).addTo(map);
-
-        /*  "<a href='" + feature.properties.Website + "website'>" +
-             "<b>"+name+"</b><br>"+
-             "<i>"+date+"</i><br>"  +location+  "<br>" ) */
-
-    </script>
+    
+        // Function to create subway layers
+        function createSubwayLayer(color, lineArray) {
+            return L.geoJson(subway, {
+                pointToLayer: function (feature, latlng) {
+                    return L.circleMarker(latlng, {
+                        color: 'white',
+                        weight: 2,
+                        fillColor: color,
+                        fillOpacity: .8,
+                        radius: 4,
+                    });
+                },
+                filter: function (feature) {
+                    return matchLine(feature.properties.line, lineArray);
+                },
+                onEachFeature: function (feature, layer) {
+                    var name = feature.properties.name;
+                    var line = feature.properties.line;
+    
+                    layer.bindTooltip(`<b>${name}</b><br><i>${line}</i>`, { sticky: true });
+    
+                    layer.on('mouseover', function () {
+                        layer.setStyle({ fillColor: 'red' });
+                    });
+                    layer.on('mouseout', function () {
+                        layer.setStyle({ fillColor: color });
+                    });
+                }
+            });
+        }
+    
+        // Define the layers using the function
+        var greyline = createSubwayLayer('grey', ["L","S"]);
+        var brownline = createSubwayLayer('brown', ["B", "D", "F"]);
+        var yellowline = createSubwayLayer('yellow', ["N", "R", "Q", "W"]);
+        var redline = createSubwayLayer('red', ["1", "2", "3"]);
+        var greenline = createSubwayLayer('green', ["4", "5", "6"]);
+        var blueline = createSubwayLayer('blue', ["A", "C", "E"]);
+    
+        // Add layers to the map
+        greyline.addTo(map);
+        brownline.addTo(map);
+        yellowline.addTo(map);
+        redline.addTo(map);
+        greenline.addTo(map);
+        blueline.addTo(map);
+    
+    </script>    
 
 </body>
 
