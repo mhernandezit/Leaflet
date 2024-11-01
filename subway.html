@@ -211,20 +211,20 @@
             center: [40.7831, -73.9712],
             zoom: 10,
         });
-    
+
         var tiles = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
             subdomains: 'abcd',
             maxZoom: 19
         });
         tiles.addTo(map);
-    
+
         // Helper function to match lines in any format
         function matchLine(featureLine, lineArray) {
             const featureLines = featureLine.split(/[-\s]+/);  // Split by dashes or spaces
             return lineArray.some(line => featureLines.includes(line));
         }
-    
+
         // Function to create subway layers
         function createSubwayLayer(color, lineArray) {
             return L.geoJson(subway, {
@@ -243,9 +243,9 @@
                 onEachFeature: function (feature, layer) {
                     var name = feature.properties.name;
                     var line = feature.properties.line;
-    
+
                     layer.bindTooltip(`<b>${name}</b><br><i>${line}</i>`, { sticky: true });
-    
+
                     layer.on('mouseover', function () {
                         layer.setStyle({ fillColor: 'red' });
                     });
@@ -255,15 +255,15 @@
                 }
             });
         }
-    
+
         // Define the layers using the function
-        var greyline = createSubwayLayer('grey', ["L","S"]);
+        var greyline = createSubwayLayer('grey', ["L", "S"]);
         var brownline = createSubwayLayer('brown', ["B", "D", "F"]);
         var yellowline = createSubwayLayer('yellow', ["N", "R", "Q", "W"]);
         var redline = createSubwayLayer('red', ["1", "2", "3"]);
         var greenline = createSubwayLayer('green', ["4", "5", "6"]);
         var blueline = createSubwayLayer('blue', ["A", "C", "E"]);
-    
+
         // Add layers to the map
         greyline.addTo(map);
         brownline.addTo(map);
@@ -271,8 +271,8 @@
         redline.addTo(map);
         greenline.addTo(map);
         blueline.addTo(map);
-    
-    </script>    
+
+    </script>
 
 </body>
 
