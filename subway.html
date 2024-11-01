@@ -220,7 +220,7 @@
 
         tiles.addTo(map);
 
-        var all = L.geoJson(subway, {
+        var defaultview = L.geoJson(subway, {
             pointToLayer: function (feature, latlng) {
                 console.log(feature.properties)
                 return L.circleMarker(latlng, {
@@ -266,7 +266,7 @@
 
         }).addTo(map);
 
-        var l = L.geoJson(subway, {
+        var ltrain = L.geoJson(subway, {
             pointToLayer: function (feature, latlng) {
                 console.log(feature.properties.name)
                 return L.circleMarker(latlng, {
@@ -315,7 +315,7 @@
         }).addTo(map);
 
 
-        var j = L.geoJson(subway, {
+        var bdfq = L.geoJson(subway, {
             pointToLayer: function (feature, latlng) {
                 console.log(feature.properties.name)
                 return L.circleMarker(latlng, {
@@ -328,7 +328,7 @@
             },
 
             filter: function (feature, layer) {
-                if (feature.properties.line === "Q" || feature.properties.line === "B-Q") {
+                if (feature.properties.line === "Q" || feature.properties.line === "B-Q" || feature.properties.line === "D" || feature.properties.line === "F" || feature.properties.line === "B-D-F-M") {
                     return true
                 }
             },
@@ -376,20 +376,20 @@
         //radius: 2 //step4
         //});   
 
-        var o = L.geoJson(subway, {
+        var redline = L.geoJson(subway, {
             pointToLayer: function (feature, latlng) {
                 console.log(feature.properties.name)
                 return L.circleMarker(latlng, {
-                    color: 'pink',
+                    color: 'white',
                     weight: 2,
-                    fillColor: 'pink',
+                    fillColor: 'red',
                     fillOpacity: .5,
                     radius: 4 //step4
                 });
             },
 
             filter: function (feature, layer) {
-                if (feature.properties.line === "1") {
+                if (feature.properties.line === "1" || feature.properties.line === "2" || feature.properties.line === "3" || feature.properties.line === "1-2-3") {
                     return true
                 }
             },
@@ -424,6 +424,101 @@
 
         }).addTo(map);
 
+        var greenline = L.geoJson(subway, {
+            pointToLayer: function (feature, latlng) {
+                console.log(feature.properties.name)
+                return L.circleMarker(latlng, {
+                    color: 'white',
+                    weight: 2,
+                    fillColor: 'green',
+                    fillOpacity: .5,
+                    radius: 4 //step4
+                });
+            },
+
+            filter: function (feature, layer) {
+                if (feature.properties.line === "4" || feature.properties.line === "4-5" || feature.properties.line === "4-5-6" || feature.properties.line === "5" || feature.properties.line === "6" || feature.properties.line === "6-6 Express" || feature.properties.line === "6-6 Express-6 Local") {     
+                    return true
+                }
+            },
+
+            //step 5
+            onEachFeature: function (feature, layer) {
+                layer.on('mouseover', function () {
+                    layer.setStyle({
+                        fillColor: 'white'
+                    });
+                });
+                layer.on('mouseout', function () {
+                    layer.setStyle({
+                        fillColor: 'red'
+                    });
+                });
+
+
+                //step 6  
+
+                var name = feature.properties.name
+                var line = feature.properties.line
+
+
+
+
+                var popup = (
+                    "<b>" + name + "</b><br>" +
+                    "<i>" + line + "</i><br>")
+                layer.bindTooltip(popup).openTooltip
+            }
+
+        }).addTo(map);
+
+        var blueline = L.geoJson(subway, {
+            pointToLayer: function (feature, latlng) {
+                console.log(feature.properties.name)
+                return L.circleMarker(latlng, {
+                    color: 'white',
+                    weight: 2,
+                    fillColor: 'blue',
+                    fillOpacity: .5,
+                    radius: 4 //step4
+                });
+            },
+
+            filter: function (feature, layer) {
+                if (feature.properties.line === "A" || feature.properties.line === "A-C" || feature.properties.line === "A-C-E" || feature.properties.line === "C" || feature.properties.line === "E") {
+                    return true
+                }
+            },
+
+            //step 5
+            onEachFeature: function (feature, layer) {
+                layer.on('mouseover', function () {
+                    layer.setStyle({
+                        fillColor: 'white'
+                    });
+                });
+                layer.on('mouseout', function () {
+                    layer.setStyle({
+                        fillColor: 'red'
+                    });
+                });
+
+
+                //step 6  
+
+                var name = feature.properties.name
+                var line = feature.properties.line
+
+
+
+
+                var popup = (
+                    "<b>" + name + "</b><br>" +
+                    "<i>" + line + "</i><br>")
+                layer.bindTooltip(popup).openTooltip
+            }
+
+        }).addTo(map);
 
         var b = L.geoJson(b, {
             style: function (feature) {
