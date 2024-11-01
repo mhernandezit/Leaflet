@@ -225,7 +225,7 @@
             return lineArray.some(line => featureLines.includes(line));
         }
 
-        // Function to create subway layers
+        // Function to create subway layers - takes color and lineArray as arguments
         function createSubwayLayer(color, lineArray) {
             return L.geoJson(subway, {
                 pointToLayer: function (feature, latlng) {
@@ -256,7 +256,7 @@
             });
         }
 
-        // Define the layers using the function
+        // Define the layers using the function - one for each subway line
         var greyline = createSubwayLayer('grey', ["L", "S"]);
         var brownline = createSubwayLayer('brown', ["B", "D", "F"]);
         var yellowline = createSubwayLayer('yellow', ["N", "R", "Q", "W"]);
@@ -264,7 +264,7 @@
         var greenline = createSubwayLayer('green', ["4", "5", "6"]);
         var blueline = createSubwayLayer('blue', ["A", "C", "E"]);
 
-        // Add layers to the map
+        // Add lines to the map
         greyline.addTo(map);
         brownline.addTo(map);
         yellowline.addTo(map);
