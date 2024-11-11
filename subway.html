@@ -46,6 +46,7 @@
         }
 
         #map {
+            /* Map container styles */
             width: 50%;
             height: 70vh;
             margin: 10px auto;
@@ -290,6 +291,7 @@
         }
 
         // Define the layers using the function - one for each subway line
+        // In this example, we're only showing the red line
         var greyline = createSubwayLayer('grey', ["L", "S"]);
         var qline = createSubwayLayer('yellow', ["Q"]);
         var brownline = createSubwayLayer('brown', ["B", "D", "F"]);
@@ -300,8 +302,10 @@
         var purpleline = createSubwayLayer('purple', ["7"]);
 
         // Add lines to the map
+        // In this example, we're only adding the red line
         redline.addTo(map);
-/*         qline.addTo(map);
+/*      commenting out the other lines
+        qline.addTo(map);
         greyline.addTo(map);
         brownline.addTo(map);
         yellowline.addTo(map);
