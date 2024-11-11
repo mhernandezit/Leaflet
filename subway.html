@@ -11,38 +11,68 @@
     <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 
     <style>
-        body {
+        /* Reset styles */
+        body, h1, h2, p {
             margin: 0;
             padding: 0;
+        }
+
+        /* Page styles */
+        body {
             background: whitesmoke;
             font-family: Lato, sans-serif;
             color: #0D0000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         header {
-            padding: 6px 10%;
+            padding: 20px 0;
+            text-align: center;
+            color: #001323;
         }
 
         h1 {
-            display: inline-block;
-            margin-right: 20px;
+            font-size: 2em;
+            font-weight: bold;
             color: #001323;
         }
 
         h2 {
-            display: inline-block;
-            color: #001323;
+            font-size: 1.2em;
+            font-weight: normal;
+            color: #555;
         }
 
         #map {
-            width: 80%;
-            height: 540px;
+            width: 50%;
+            height: 70vh;
             margin: 10px auto;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         footer {
-            padding: 6px 10%;
-            width: 80%;
+            padding: 10px;
+            width: 50%;
+            text-align: center;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        footer a {
+            color: #0078A8;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
         }
 
         p {
@@ -209,8 +239,8 @@
     <script>
         // Define the map
         var map = L.map('map', {
-            center: [40.7831, -73.9712],
-            zoom: 10,
+            center: [40.758, -73.9855], // Center on Times Square in Manhattan
+            zoom: 11                    // Zoom in closer to highlight Manhattan
         });
 
         var tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
