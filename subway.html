@@ -193,14 +193,16 @@
 <body>
     <header>
         <h1>NYC Subway Stations</h1>
-        <h2></h2>
+        <h2>1, 2, and 3 Trains</h2>
     </header>
 
     <div id='map'></div>
 
     <footer>
         <p>By Mike Hernandez</p>
-        <p></p>
+        <p>Map functionality provided by <a href="https://leafletjs.com/" target="_blank">Leaflet.js</a></p>
+        <p>New York Subway station data sourced from <a href="https://data.cityofnewyork.us/Transportation/Subway-Lines/3qz8-muuu" target="_blank">NYC Open Data</a>, licensed under Open Data Commons Open Database License (ODbL).</p>
+
     </footer>
 
     <script src="Subway Stations.js"></script>
@@ -212,8 +214,8 @@
             zoom: 10,
         });
 
-        var tiles = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+        var tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://cartodb.com/attributions">CartoDB</a>',
             subdomains: 'abcd',
             maxZoom: 19
         });
@@ -222,20 +224,20 @@
         // Helper function to match lines in any format
         function matchLine(featureLine, lineArray) {
             const featureLines = featureLine.split(/[-\s]+/);  // Split by dashes or spaces
-            return lineArray.some(line => featureLines.includes(line));
+            return lineArray.some(line => featureLines.includes(line));  // Check if any of the lines match any of the feature lines
         }
 
         // Function to create subway layers - takes color and lineArray as arguments
         function createSubwayLayer(color, lineArray) {
             return L.geoJson(subway, {
                 pointToLayer: function (feature, latlng) {
-                    return L.circleMarker(latlng, {
+                    return L.circle(latlng, {
                         color: 'white',
-                        weight: 3,
+                        weight: 1,
                         fillColor: color,
-                        fillOpacity: .8,
-                        radius: 3,
-                        stroke: false
+                        fillOpacity: .9,
+                        radius: 150,
+                        stroke: true
                     });
                 },
                 filter: function (feature) {
@@ -244,11 +246,12 @@
                 onEachFeature: function (feature, layer) {
                     var name = feature.properties.name;
                     var line = feature.properties.line;
+                    var notes = feature.properties.notes;
 
-                    layer.bindTooltip(`<b>${name}</b><br><i>${line}</i>`, { sticky: true });
+                    layer.bindTooltip(`<b style='color: ${color}'>${name}</b><br><i style='color: ${color}'>${line}</i><br><i>${notes}</i>`, { sticky: true });
 
                     layer.on('mouseover', function () {
-                        layer.setStyle({ fillColor: 'red' });
+                        layer.setStyle({ fillColor: 'white' });
                     });
                     layer.on('mouseout', function () {
                         layer.setStyle({ fillColor: color });
@@ -259,6 +262,7 @@
 
         // Define the layers using the function - one for each subway line
         var greyline = createSubwayLayer('grey', ["L", "S"]);
+        var qline = createSubwayLayer('yellow', ["Q"]);
         var brownline = createSubwayLayer('brown', ["B", "D", "F"]);
         var yellowline = createSubwayLayer('yellow', ["N", "R", "Q", "W"]);
         var redline = createSubwayLayer('red', ["1", "2", "3"]);
@@ -267,15 +271,15 @@
         var purpleline = createSubwayLayer('purple', ["7"]);
 
         // Add lines to the map
+        redline.addTo(map);
+/*         qline.addTo(map);
         greyline.addTo(map);
         brownline.addTo(map);
         yellowline.addTo(map);
-        redline.addTo(map);
         greenline.addTo(map);
         blueline.addTo(map);
-        purpleline.addTo(map);
-
-    </script>
+        purpleline.addTo(map); */
+       </script>
 
 </body>
 
