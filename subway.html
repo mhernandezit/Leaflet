@@ -12,7 +12,10 @@
 
     <style>
         /* Reset styles */
-        body, h1, h2, p {
+        body,
+        h1,
+        h2,
+        p {
             margin: 0;
             padding: 0;
         }
@@ -231,8 +234,11 @@
 
     <footer>
         <p>By Mike Hernandez</p>
-        <p>Map functionality provided by <a href="https://leafletjs.com/" target="_blank" rel="noopener">Leaflet.js</a></p>
-        <p>New York Subway station data sourced from <a href="https://data.cityofnewyork.us/Transportation/Subway-Lines/3qz8-muuu" target="_blank" rel="noopener">NYC Open Data</a>, licensed under Open Data Commons Open Database License (ODbL).</p>
+        <p>Map functionality provided by <a href="https://leafletjs.com/" target="_blank" rel="noopener">Leaflet.js</a>
+        </p>
+        <p>New York Subway station data sourced from <a
+                href="https://data.cityofnewyork.us/Transportation/Subway-Lines/3qz8-muuu" target="_blank"
+                rel="noopener">NYC Open Data</a>, licensed under Open Data Commons Open Database License (ODbL).</p>
     </footer>
 
     <script src="Subway Stations.js"></script>
@@ -290,6 +296,17 @@
             });
         }
 
+        var boroughBoundaries = L.geoJson(b, {
+            style: function (feature) {
+                return {
+                    color: 'white',
+                    opacity: 1,
+                    fill: false,
+                    weight: 3
+                };
+            }
+        }).addTo(map);
+
         // Define the layers using the function - one for each subway line
         // In this example, we're only showing the red line
         var greyline = createSubwayLayer('grey', ["L", "S"]);
@@ -304,15 +321,15 @@
         // Add lines to the map
         // In this example, we're only adding the red line
         redline.addTo(map);
-/*      commenting out the other lines
-        qline.addTo(map);
-        greyline.addTo(map);
-        brownline.addTo(map);
-        yellowline.addTo(map);
-        greenline.addTo(map);
-        blueline.addTo(map);
-        purpleline.addTo(map); */
-       </script>
+        /*      commenting out the other lines
+                qline.addTo(map);
+                greyline.addTo(map);
+                brownline.addTo(map);
+                yellowline.addTo(map);
+                greenline.addTo(map);
+                blueline.addTo(map);
+                purpleline.addTo(map); */
+    </script>
 
 </body>
 
