@@ -58,6 +58,24 @@
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
 
+        /* Tooltips styling inside the map */
+        #borough-tooltip {
+            position: absolute;
+            right: 20px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border-radius: 5px;
+            font-size: 1em;
+            visibility: visible;
+            z-index: 1000;
+        }
+
+        #borough-tooltip {
+            top: 20%; /* Middle-right side of the map */
+            transform: translateY(10%);
+        }
+
         footer {
             padding: 10px;
             width: 50%;
@@ -230,7 +248,9 @@
         <h2>1, 2, and 3 Trains</h2>
     </header>
 
-    <div id='map'></div>
+    <div id="map">
+        <div id="borough-tooltip">Borough Name</div> <!-- Fixed tooltip for boroughs -->
+    </div>
 
     <footer>
         <p>By Mike Hernandez</p>
@@ -296,14 +316,43 @@
             });
         }
 
-        var boroughBoundaries = L.geoJson(b, {
+        // Define a color for each borough based on `boro_name`
+        function getBoroughColor(boroName) {
+            switch (boroName) {
+                case "Staten Island": return "#FF7F50"; // Coral
+                case "Brooklyn": return "#6495ED"; // Cornflower Blue
+                case "Queens": return "#FFD700"; // Gold
+                case "Manhattan": return "#8A2BE2"; // Blue Violet
+                case "Bronx": return "#7FFF00"; // Chartreuse
+                default: return "#FFFFFF"; // Default to white
+            }
+        }
+
+        // Reference the fixed tooltip element
+        var boroughTooltip = document.getElementById('borough-tooltip');
+
+
+
+        // Load the borough boundaries GeoJSON with individual styles
+        L.geoJson(b, {
             style: function (feature) {
                 return {
-                    color: 'white',
+                    color: getBoroughColor(feature.properties.boro_name), // Outline color based on borough
+                    fillColor: getBoroughColor(feature.properties.boro_name), // Fill color based on borough
+                    weight: 2,
                     opacity: 1,
-                    fill: false,
-                    weight: 3
+                    fillOpacity: 0.5 // Slightly transparent fill
                 };
+            },
+            onEachFeature: function(feature, layer) {
+                // Event listeners for hover behavior
+                layer.on('mouseover', function() {
+                    boroughTooltip.innerHTML = feature.properties.boro_name; // Set borough name
+                    boroughTooltip.style.visibility = 'visible'; // Show tooltip
+                });
+                layer.on('mouseout', function() {
+                    boroughTooltip.style.visibility = 'hidden'; // Hide tooltip
+                });
             }
         }).addTo(map);
 
