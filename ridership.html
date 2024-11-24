@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>Ridership in NYC</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<!-- Leaflet CSS -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+	<!-- External Libraries -->
+	<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+	<script src="ridership.js"></script>
+	<script src="./simple-statistics.min.js"></script>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			text-align: center;
+		}
+
+		#map {
+			width: 80%;
+			height: 70vh;
+			margin: 20px auto;
+			border: 1px solid #ccc;
+		}
+
+		.legend {
+			background: white;
+			line-height: 1.5em;
+			padding: 10px;
+			border-radius: 5px;
+			box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+		}
+
+		.legend i {
+			width: 18px;
+			height: 18px;
+			float: left;
+			margin-right: 8px;
+			opacity: 0.7;
+		}
+
+		footer {
+			margin-top: 20px;
+			font-size: 0.9em;
+			color: #555;
+		}
+
+		footer a {
+			color: #1f77b4;
+			text-decoration: none;
+		}
+
+		footer a:hover {
+			text-decoration: underline;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>Subway Ridership in NYC</h1>
+	<div id="map"></div>
+
+	<footer>
+		<p>
+			Data Source: <a href="https://new.mta.info/agency/new-york-city-transit/subway-bus-ridership-2021"
+				target="_blank" rel="noopener">MTA Ridership Statistics 2021</a>
+		</p>
+		<p>
+			Libraries Used:
+			<a href="https://leafletjs.com/" target="_blank" rel="noopener">Leaflet</a>,
+			<a href="https://simplestatistics.org/" target="_blank" rel="noopener">Simple Statistics</a>
+		</p>
+	</footer>
+
+	<script>
+		/*** 1. Initialize Map ***/
+		// Create the map and set its initial view
+		var map = L.map("map").setView([40.735, -73.9176], 12);
+
+		// Add a tile layer (dark theme) from CartoDB
+		L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png", {
+			attribution:
+				'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://cartodb.com/attributions">CartoDB</a>',
+			subdomains: "abcd",
+			maxZoom: 19,
+		}).addTo(map);
+
+		/*** 2. Prepare Data ***/
+		// Extract ridership values from GeoJSON features
+		const ridershipValues = r.features.map((station) => station.properties.ridership);
+
+		// Sort stations by ridership in descending order for ranking purposes
+		const sortedStations = [...r.features].sort(
+			(a, b) => b.properties.ridership - a.properties.ridership
+		);
+
+		// Compute natural breaks using Ckmeans for visual grouping
+		let ckmeansBreaks = [];
+		const clusters = ss.ckmeans(ridershipValues, 5); // Group into 5 categories
+		ckmeansBreaks = clusters.map((cluster) => cluster[0]); // Get lower bounds of each cluster
+		ckmeansBreaks.push(
+			clusters[clusters.length - 1][clusters[clusters.length - 1].length - 1] // Add upper bound of the last cluster
+		);
+
+		// Define a color palette for the clusters
+		const ckmeansColors = [
+			"#1f77b4", // Deep Blue
+			"#2ca02c", // Green
+			"#ff7f0e", // Orange
+			"#d62728", // Red
+			"#9467bd"  // Purple
+		];
+
+		/*** 3. Utility Functions ***/
+		// Get the appropriate color for a station's ridership based on Ckmeans breaks
+		function getCkmeansColor(ridership) {
+			for (let i = 0; i < ckmeansBreaks.length - 1; i++) {
+				if (ridership >= ckmeansBreaks[i] && ridership <= ckmeansBreaks[i + 1]) {
+					return ckmeansColors[i];
+				}
+			}
+			return ckmeansColors[ckmeansColors.length - 1];
+		}
+
+		// Scale circle radius based on ridership values
+		function getRadius(ridership) {
+			const minRadius = 5;
+			const maxRadius = 25;
+			const min = Math.min(...ridershipValues);
+			const max = Math.max(...ridershipValues);
+			return minRadius + ((ridership - min) / (max - min)) * (maxRadius - minRadius);
+		}
+
+		/*** 4. Add Data to Map ***/
+		L.geoJSON(r, {
+			// Style the circle markers based on ridership
+			pointToLayer: function (feature, latlng) {
+				const color = getCkmeansColor(feature.properties.ridership);
+				const radius = getRadius(feature.properties.ridership);
+				return L.circleMarker(latlng, {
+					color: "white", // Border color
+					fillColor: color, // Fill color based on ridership
+					fillOpacity: 0.8,
+					radius: radius, // Size proportional to ridership
+				});
+			},
+			// Add popup with station information
+			onEachFeature: function (feature, layer) {
+				// Find the station's rank based on its position in the sorted array
+				const rank =
+					sortedStations.findIndex(
+						(station) =>
+							station.properties.name === feature.properties.name
+					) + 1;
+
+				// Get the appropriate color for the station
+				const color = getCkmeansColor(feature.properties.ridership);
+
+				// Create and bind the popup content
+				const popupContent =
+					`<b style="color:${color};">${rank}. ${feature.properties.name}</b><br>` +
+					`${feature.properties.ridership.toLocaleString()} people per year`;
+				layer.bindPopup(popupContent);
+			},
+		}).addTo(map);
+
+		/*** 5. Add Legend ***/
+		var legend = L.control({ position: "bottomright" });
+
+		// Define the legend's structure and content
+		legend.onAdd = function () {
+			var div = L.DomUtil.create("div", "legend");
+			div.innerHTML = "<strong>Ridership Levels</strong><br>";
+			for (let i = 0; i < ckmeansBreaks.length - 1; i++) {
+				div.innerHTML +=
+					'<i style="background:' +
+					ckmeansColors[i] +
+					'"></i> ' +
+					ckmeansBreaks[i].toLocaleString() +
+					" &ndash; " +
+					ckmeansBreaks[i + 1].toLocaleString() +
+					"<br>";
+			}
+			return div;
+		};
+
+		legend.addTo(map);
+	</script>
+</body>
+
+</html>
